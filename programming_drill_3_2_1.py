@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Jan 16 17:55:06 2021
+Created on Sun Jan 17 19:11:17 2021
 
 @author: jyotm
 """
 
+#implementation of probablistic matrix operation in time scale
+
 import numpy as np
 
 #check for the code logic if true then it will take default values 
-test = False
+test = True
 
 #testing 
 if test:
@@ -23,10 +25,11 @@ inputState = []
 
 #testing 
 if test:
-    inputState = [2, 1, 3]
+    inputState = [0.2, 0.5, 0.3]
 else:  
     for i in range(num):
-        numMarbles = int(input(f'enter number of marbles at {i}: \n'))
+        #now floats allowed
+        numMarbles = float(input(f'enter number of marbles at {i}: \n'))
         inputState.append(numMarbles)
 
 inputState = np.array(inputState)
@@ -40,22 +43,24 @@ matrixOperation = np.zeros((num,num))
 #testing
 if test:
     matrixOperation = np.array(
-    [[0. ,0., 0.],
-     [0., 0. ,1.],
-     [1., 1., 0.]])
+    [[0.5 ,0.5, 0.],
+     [0.5, 0.3 ,0.2],
+     [0., 0.2, 0.8]])
     
 else: 
-    #the operation only allows one outgoing edge from a vertex, we can use this to iterate columnwise
-    i = 0
-    while i < num:
-        #for eg. if 0 -----------> 3 -------> 2 ----------> 3, 1 -----------> 0 then enter 3 for 0th vertex
-        j = int(input(f'enter vertex number which is connnected to {i}:'))
-        if j >= num:
-            print(f"please enter valid vertex number in range 0 to {num}")
-            continue
-        matrixOperation[j,i] = 1
-        i += 1
+    #the operation only allows doubly stochastic matrix, so we input that from user
+    for i in range(num):
+        for j in range(num):
+            value = float(input(f'enter vertex number which is connnected to {i}:'))
+            if value > 1 :
+                print(f"please enter valid vertex number in [0,1]")
+                break
+            matrixOperation[j,i] = value
 
+#check if matrix operation is doubly stochastic
+for k in range(num):
+    if np.sum(matrixOperation[:,k]) != 1 or np.sum(matrixOperation[k,:]) != 1:
+        raise ValueError
 
 
 print('the operation matrix is: \n')
@@ -63,13 +68,13 @@ print(matrixOperation)
         
 if test:
     #the oepration after one time step is
+    nthTime = 1
     print(matrixOperation.dot(inputState.T))
 else:
     #nth power of operation matrix
-    nthTime = int(input("enter number of time steps after the input: \n"))
+    nthTime = float(input("enter n dimention : \n"))
     matrixNthPow = np.linalg.matrix_power(matrixOperation,nthTime)
     #state after n time step
     marbleStates = matrixNthPow.dot(inputState.T)
-
     print(f'marble states after {nthTime} time steps is {marbleStates}')
    
