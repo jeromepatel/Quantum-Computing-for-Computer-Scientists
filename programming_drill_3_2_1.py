@@ -10,7 +10,7 @@ Created on Sun Jan 17 19:11:17 2021
 import numpy as np
 
 #check for the code logic if true then it will take default values 
-test = True
+test = False
 
 #testing 
 if test:
@@ -35,7 +35,8 @@ else:
 inputState = np.array(inputState)
 print(f'input/initial state of marbles is {inputState}')
 
-
+#to check if only 1 marble state is entered, comment this line if you need to enter more than 1 marble
+assert(np.sum(inputState) == 1)
 #initialize the operation array with zeros
 matrixOperation = np.zeros((num,num))
 
@@ -51,15 +52,17 @@ else:
     #the operation only allows doubly stochastic matrix, so we input that from user
     for i in range(num):
         for j in range(num):
-            value = float(input(f'enter vertex number which is connnected to {i}:'))
+            value = float(input(f'enter vertex probability of path from {i} to {j}:'))
             if value > 1 :
-                print(f"please enter valid vertex number in [0,1]")
+                print(f"please enter valid vertex probability in [0,1]")
                 break
             matrixOperation[j,i] = value
 
+print(matrixOperation)
 #check if matrix operation is doubly stochastic
 for k in range(num):
     if np.sum(matrixOperation[:,k]) != 1 or np.sum(matrixOperation[k,:]) != 1:
+        print("Please check your operation matrix again, make sure its row and column add up to 1")
         raise ValueError
 
 
@@ -72,9 +75,9 @@ if test:
     print(matrixOperation.dot(inputState.T))
 else:
     #nth power of operation matrix
-    nthTime = float(input("enter n dimention : \n"))
+    nthTime = int(input("enter number of time steps : \n"))
     matrixNthPow = np.linalg.matrix_power(matrixOperation,nthTime)
     #state after n time step
     marbleStates = matrixNthPow.dot(inputState.T)
-    print(f'marble states after {nthTime} time steps is {marbleStates}')
+    print(f'marble state after {nthTime} time steps is {marbleStates}')
    
