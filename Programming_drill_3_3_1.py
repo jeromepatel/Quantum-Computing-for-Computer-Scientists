@@ -62,7 +62,7 @@ matrixOperation = np.zeros((num,num)) * complex(0)
 
 #testing
 if test:
-    x = 1/sqrt(2)
+    x = complex(1/sqrt(2),0)
     #print(x)
     matrixOperation = np.array(
     [[x ,x, 0.],
@@ -85,6 +85,7 @@ print(matrixOperation)
 #check whether matrix operation square is doubly stochastic
 for k in range(num):
     #print(round(np.sum(np.square(matrixOperation[:,k])), 3), "asaagsggg")
+    #alternatively use np.around(matrixOperation,3) but next line works too :)
     if round(np.sum(np.square(matrixOperation[:,k])), 3) != complex(1) or round(np.sum(np.square(matrixOperation[k,:])),3) != complex(1):
         print("Please check your operation matrix again, make sure its row and column add up to 1")
         raise ValueError

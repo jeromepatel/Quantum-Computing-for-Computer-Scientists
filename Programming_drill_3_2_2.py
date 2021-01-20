@@ -103,7 +103,7 @@ assert(np.sum(initialState) == 1)
 
 if test:
     #the oepration after one time step is
-    nthTime = 2
+    nthTime = 1
     print(matrixBullets.dot(initialState.T))
 else:
     #nth power of operation matrix
