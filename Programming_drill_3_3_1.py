@@ -26,7 +26,7 @@ from math import sqrt
 
 
 #check for the code logic if true then it will take default values 
-test = False
+test = True
 
 #testing 
 if test:
@@ -53,7 +53,11 @@ inputState = np.array(inputState)
 print(f'input/initial state of marbles is {inputState}')
 
 #to check if only 1 marble state is entered, comment this line if you need to enter more than 1 marble
-assert(np.sum(np.square(inputState)) == 1)
+#update, apparantly these won't work for complex numbs, I haven't checked that before 
+# assert(np.sum(np.square(inputState)) == 1)
+#update 2 this works but a bit of over work
+assert(sum(list(map(abs,inputState))) == 1)
+
 #initialize the operation array with zeros
 
 
@@ -83,10 +87,14 @@ else:
 
 print(matrixOperation)
 #check whether matrix operation square is doubly stochastic
+
 for k in range(num):
-    #print(round(np.sum(np.square(matrixOperation[:,k])), 3), "asaagsggg")
-    #alternatively use np.around(matrixOperation,3) but next line works too :)
-    if round(np.sum(np.square(matrixOperation[:,k])), 3) != complex(1) or round(np.sum(np.square(matrixOperation[k,:])),3) != complex(1):
+    
+    #sorry, this won't work for complex numbers as np.square is simply a again a complex number instead of magnitude array but works like a charm for float values
+    #if round(np.sum(np.square(matrixOperation[:,k])), 3) != complex(1) or round(np.sum(np.square(matrixOperation[k,:])),3) != complex(1):
+        
+    #update this works fine for complex nos. but a bit of overkill
+    if np.sum(np.around(np.square(list(map(abs,matrixOperation[:,k]))),3)) != 1 or np.sum(np.around(np.square(list(map(abs,matrixOperation[k,:]))),3)) != 1:
         print("Please check your operation matrix again, make sure its row and column add up to 1")
         raise ValueError
 
